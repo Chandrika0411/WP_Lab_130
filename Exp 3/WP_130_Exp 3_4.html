@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Global Times - Modern Newspaper</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 30px 20px;
+            line-height: 1.7;
+            position: relative;
+        }
+
+        /* Animated background pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,.05) 10px, rgba(255,255,255,.05) 20px),
+                repeating-linear-gradient(-45deg, transparent, transparent 10px, rgba(0,0,0,.02) 10px, rgba(0,0,0,.02) 20px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Weather Widget */
+        .weather-widget {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            animation: slideInRight 0.5s ease;
+        }
+
+        .weather-widget h4 {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .weather-widget .temp {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ff6b6b;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Main Newspaper Layout - CSS Grid */
+        .newspaper-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: auto 1fr 1fr 1fr;
+            grid-template-areas: 
+                "title title title"
+                "feature-article feature-article cover-image"
+                "secondary-article secondary-article cover-image"
+                "small-article1 small-article2 small-article3";
+            gap: 25px;
+            max-width: 1600px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.3),
+                0 0 0 1px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Decorative corner ribbons */
+        .newspaper-layout::before,
+        .newspaper-layout::after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            z-index: -1;
+        }
+
+        .newspaper-layout::before {
+            top: -10px;
+            left: -10px;
+            border-radius: 12px 0 0 0;
+        }
+
+        .newspaper-layout::after {
+            bottom: -10px;
+            right: -10px;
+            border-radius: 0 0 12px 0;
+        }
+
+        /* Title/Header - Masthead */
+        .title {
+            grid-area: title;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 40px;
+            text-align: center;
+            border-radius: 10px;
+            box-shadow: 
+                0 10px 40px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .title::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { left: -100%; }
+            50%, 100% { left: 100%; }
+        }
+
+        .title h1 {
+            font-size: 5rem;
+            color: #fff;
+            font-family: 'Times New Roman', serif;
+            letter-spacing: 8px;
+            text-shadow: 
+                0 0 20px rgba(255, 255, 255, 0.3),
+                0 0 40px rgba(102, 126, 234, 0.5),
+                3px 3px 6px rgba(0, 0, 0, 0.5);
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .title .tagline {
+            font-size: 1rem;
+            color: #a8b2d1;
+            letter-spacing: 3px;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        .title .date-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 20px;
+            border-top: 2px solid rgba(255, 255, 255, 0.2);
+            font-size: 0.9rem;
+            color: #a8b2d1;
+        }
+
+        .title .edition {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 6px 15px;
+            border-radius: 20px;
+            color: white;
+            font-weight: bold;
+            letter-spacing: 1px;
+            font-size: 0.8rem;
+        }
+
+        /* Feature Article - Main Story */
+        .feature-article {
+            grid-area: feature-article;
+            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+            padding: 35px;
+            border-radius: 12px;
+            border: 1px solid #e0e0e0;
+            box-shadow: 
+                0 10px 40px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            animation: fadeInLeft 1s ease 0.2s both;
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .feature-article::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(180deg, #ff6b6b 0%, #ee5a6f 100%);
+            box-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+        }
+
+        .feature-article:hover {
+            transform: translateY(-8px);
+            box-shadow: 
+                0 20px 60px rgba(255, 107, 107, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 1);
+        }
+
+        .feature-article .category {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .feature-article h2 {
+            font-size: 2.8rem;
+            color: #1a1a2e;
+            margin-bottom: 20px;
+            line-height: 1.3;
+            font-weight: 900;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .feature-article h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #ff6b6b 0%, #ee5a6f 100%);
+            border-radius: 2px;
+        }
+
+        .feature-article .meta {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            color: #666;
+            font-style: italic;
+        }
+
+        .feature-article .meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .feature-article p {
+            font-size: 1.15rem;
+            color: #333;
+            text-align: justify;
+            line-height: 2;
+            column-count: 2;
+            column-gap: 30px;
+            margin-bottom: 20px;
+        }
+
+        .feature-article .read-more {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            margin-top: 10px;
+        }
+
+        .feature-article .read-more:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Cover Image */
+        .cover-image {
+            grid-area: cover-image;
+            background: #f5f5f5;
+            padding: 0;
+            border-radius: 12px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+            animation: fadeInRight 1s ease 0.4s both;
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .cover-image::before {
+            content: 'FEATURED';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 107, 107, 0.95);
+            color: white;
+            padding: 8px 20px;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            font-weight: bold;
+            border-radius: 20px;
+            z-index: 2;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        .cover-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+            max-width: 100%;
+        }
+
+        .cover-image:hover img {
+            transform: scale(1.08);
+        }
+
+        .cover-image .caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            color: white;
+            padding: 30px 20px 20px;
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+
+        /* Secondary Article */
+        .secondary-article {
+            grid-area: secondary-article;
+            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+            padding: 35px;
+            border-radius: 12px;
+            border: 1px solid #e0e0e0;
+            box-shadow: 
+                0 10px 40px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            animation: fadeInLeft 1s ease 0.6s both;
+        }
+
+        .secondary-article::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(180deg, #4ecdc4 0%, #44a08d 100%);
+            box-shadow: 0 0 10px rgba(78, 205, 196, 0.5);
+        }
+
+        .secondary-article:hover {
+            transform: translateY(-8px);
+            box-shadow: 
+                0 20px 60px rgba(78, 205, 196, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 1);
+        }
+
+        .secondary-article .category {
+            display: inline-block;
+            background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(78, 205, 196, 0.3);
+        }
+
+        .secondary-article h2 {
+            font-size: 2.3rem;
+            color: #1a1a2e;
+            margin-bottom: 20px;
+            line-height: 1.3;
+            font-weight: 900;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .secondary-article h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #4ecdc4 0%, #44a08d 100%);
+            border-radius: 2px;
+        }
+
+        .secondary-article .meta {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            color: #666;
+            font-style: italic;
+        }
+
+        .secondary-article p {
+            font-size: 1.1rem;
+            color: #333;
+            text-align: justify;
+            line-height: 2;
+        }
+
+        /* Small Articles */
+        .small-article1,
+        .small-article2,
+        .small-article3 {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .small-article1 {
+            grid-area: small-article1;
+            animation: fadeInUp 1s ease 0.8s both;
+        }
+
+        .small-article2 {
+            grid-area: small-article2;
+            animation: fadeInUp 1s ease 1s both;
+        }
+
+        .small-article3 {
+            grid-area: small-article3;
+            animation: fadeInUp 1s ease 1.2s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .small-article1::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+            box-shadow: 0 0 10px rgba(240, 147, 251, 0.5);
+        }
+
+        .small-article2::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+            box-shadow: 0 0 10px rgba(79, 172, 254, 0.5);
+        }
+
+        .small-article3::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%);
+            box-shadow: 0 0 10px rgba(67, 233, 123, 0.5);
+        }
+
+        .small-article1:hover,
+        .small-article2:hover,
+        .small-article3:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        }
+
+        .small-article1 .category,
+        .small-article2 .category,
+        .small-article3 .category {
+            display: inline-block;
+            padding: 5px 14px;
+            border-radius: 15px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            color: white;
+        }
+
+        .small-article1 .category {
+            background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+            box-shadow: 0 3px 10px rgba(240, 147, 251, 0.3);
+        }
+
+        .small-article2 .category {
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+            box-shadow: 0 3px 10px rgba(79, 172, 254, 0.3);
+        }
+
+        .small-article3 .category {
+            background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%);
+            box-shadow: 0 3px 10px rgba(67, 233, 123, 0.3);
+        }
+
+        .small-article1 h3,
+        .small-article2 h3,
+        .small-article3 h3 {
+            font-size: 1.6rem;
+            color: #1a1a2e;
+            margin-bottom: 15px;
+            font-weight: 800;
+            line-height: 1.4;
+        }
+
+        .small-article1 .meta,
+        .small-article2 .meta,
+        .small-article3 .meta {
+            font-size: 0.85rem;
+            color: #999;
+            margin-bottom: 12px;
+            font-style: italic;
+        }
+
+        .small-article1 p,
+        .small-article2 p,
+        .small-article3 p {
+            font-size: 1rem;
+            color: #444;
+            text-align: justify;
+            line-height: 1.8;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1400px) {
+            .title h1 {
+                font-size: 4rem;
+            }
+
+            .feature-article p {
+                column-count: 1;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .newspaper-layout {
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: auto auto auto auto auto auto;
+                grid-template-areas: 
+                    "title title"
+                    "feature-article feature-article"
+                    "cover-image cover-image"
+                    "secondary-article secondary-article"
+                    "small-article1 small-article2"
+                    "small-article3 small-article3";
+                padding: 30px;
+                gap: 20px;
+            }
+
+            .title h1 {
+                font-size: 3.5rem;
+                letter-spacing: 4px;
+            }
+
+            .weather-widget {
+                top: 10px;
+                right: 10px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+
+            .newspaper-layout {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto auto auto auto auto;
+                grid-template-areas: 
+                    "title"
+                    "cover-image"
+                    "feature-article"
+                    "secondary-article"
+                    "small-article1"
+                    "small-article2"
+                    "small-article3";
+                padding: 20px;
+                gap: 20px;
+            }
+
+            .title h1 {
+                font-size: 2.5rem;
+                letter-spacing: 2px;
+            }
+
+            .title .date-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .feature-article h2 {
+                font-size: 2rem;
+            }
+
+            .secondary-article h2 {
+                font-size: 1.8rem;
+            }
+
+            .feature-article p,
+            .secondary-article p {
+                font-size: 1rem;
+                column-count: 1;
+            }
+
+            .weather-widget {
+                position: static;
+                margin-bottom: 20px;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .title h1 {
+                font-size: 2rem;
+                letter-spacing: 1px;
+            }
+
+            .title .tagline {
+                font-size: 0.85rem;
+            }
+
+            .newspaper-layout {
+                padding: 15px;
+            }
+
+            .feature-article,
+            .secondary-article,
+            .small-article1,
+            .small-article2,
+            .small-article3 {
+                padding: 20px;
+            }
+
+            .feature-article h2 {
+                font-size: 1.6rem;
+            }
+
+            .secondary-article h2 {
+                font-size: 1.5rem;
+            }
+
+            .small-article1 h3,
+            .small-article2 h3,
+            .small-article3 h3 {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Weather Widget -->
+    <div class="weather-widget">
+        <h4>New York</h4>
+        <div class="temp">☀️ 72°F</div>
+    </div>
+
+    <main class="newspaper-layout">
+        <!-- Title Header - Masthead -->
+        <header class="title">
+            <h1>The Global Times</h1>
+            <div class="tagline">"Truth. Justice. Excellence."</div>
+            <div class="date-info">
+                <span>📅 Friday, January 30, 2026</span>
+                <span class="edition">PREMIUM EDITION</span>
+                <span>💵 $2.99</span>
+            </div>
+        </header>
+
+        <!-- Feature Article - Breaking News -->
+        <article class="feature-article">
+            <span class="category">🔥 Breaking News</span>
+            <h2>Quantum Computing Breakthrough Promises Revolutionary Era in Technology</h2>
+            <div class="meta">
+                <span>✍️ By Dr. Sarah Chen</span>
+                <span>📍 Silicon Valley</span>
+                <span>🕐 2 hours ago</span>
+            </div>
+            <p>
+                In a groundbreaking achievement that scientists are calling the most significant technological advancement 
+                of the century, researchers at the Global Quantum Institute have successfully demonstrated a 1000-qubit 
+                quantum computer capable of solving problems that would take classical supercomputers millennia to complete. 
+                The breakthrough, announced early this morning at an emergency press conference, represents a quantum leap 
+                forward in computational power and has immediate implications for fields ranging from drug discovery to 
+                climate modeling. Dr. Michael Rodriguez, lead scientist on the project, stated that this achievement marks 
+                the beginning of what he calls "the quantum age" of computing. The system, dubbed "QuantumCore Infinity," 
+                has already solved three previously unsolvable mathematical problems and is currently being used to model 
+                protein folding structures that could lead to cures for diseases like Alzheimer's and Parkinson's. Investment 
+                firms are already responding to the news, with tech stocks surging 15% in pre-market trading. Industry experts 
+                predict this technology will revolutionize artificial intelligence, cryptography, financial modeling, and 
+                materials science within the next five years.
+            </p>
+            <a href="#" class="read-more">READ FULL STORY →</a>
+        </article>
+
+        <!-- Cover Image with Caption -->
+        <figure class="cover-image">
+            <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800&h=1000&fit=crop" alt="Quantum Computer Lab">
+            <figcaption class="caption">
+                Scientists working on the revolutionary QuantumCore Infinity system at the Global Quantum Institute.
+            </figcaption>
+        </figure>
+
+        <!-- Secondary Article -->
+        <article class="secondary-article">
+            <span class="category">🌍 World Politics</span>
+            <h2>Historic Climate Agreement Signed by 195 Nations at Global Summit</h2>
+            <div class="meta">
+                <span>✍️ By James Anderson</span>
+                <span>📍 Geneva</span>
+            </div>
+            <p>
+                In what's being hailed as a watershed moment for international cooperation, world leaders from 195 nations 
+                have unanimously signed the most comprehensive climate agreement in history. The "Geneva Accord" commits 
+                participating countries to achieving net-zero carbon emissions by 2045, five years ahead of previous targets. 
+                The agreement includes binding commitments with enforcement mechanisms, substantial financial support for 
+                developing nations totaling $2 trillion over ten years, and immediate action plans for renewable energy 
+                transition. UN Secretary-General Maria Santos called it "humanity's finest hour," emphasizing that this 
+                unprecedented level of global cooperation demonstrates what's possible when nations unite around a common 
+                cause. The accord also establishes a new International Climate Authority with powers to monitor compliance 
+                and impose sanctions on violators. Environmental activists are celebrating while also remaining vigilant about 
+                implementation, noting that the real work begins now with translating these commitments into concrete action.
+            </p>
+        </article>
+
+        <!-- Small Article 1 - Business -->
+        <article class="small-article1">
+            <span class="category">💼 Business</span>
+            <h3>Global Markets Rally as Economic Indicators Show Strong Recovery</h3>
+            <div class="meta">📊 Markets • 30 min ago</div>
+            <p>
+                Stock markets worldwide experienced their best day in over a year as major indices surged following 
+                unexpectedly positive economic data. The Dow Jones Industrial Average jumped 3.8%, while Asian and 
+                European markets posted similar gains. Economists attribute the rally to stronger-than-expected 
+                employment numbers, declining inflation rates, and renewed consumer confidence. Technology stocks 
+                led the gains, with artificial intelligence companies seeing particular investor enthusiasm. 
+                Federal Reserve officials indicated they may pause interest rate increases, further boosting 
+                market sentiment and suggesting a potential soft landing for the global economy.
+            </p>
+        </article>
+
+        <!-- Small Article 2 - Science -->
+        <article class="small-article2">
+            <span class="category">🔬 Science</span>
+            <h3>Mars Colony Project Reaches Critical Milestone with Successful Test Flight</h3>
+            <div class="meta">🚀 Space • 1 hour ago</div>
+            <p>
+                The International Space Consortium's ambitious Mars colonization program achieved a major milestone 
+                today with the successful completion of its first crewed test flight to lunar orbit. The six-person 
+                crew spent 48 hours testing life support systems, habitat modules, and resource management protocols 
+                that will be crucial for the planned Mars mission in 2028. Commander Elena Volkov reported that all 
+                systems performed flawlessly, exceeding expectations. The mission also tested new propulsion technology 
+                that could reduce travel time to Mars by 40%. Scientists involved in the project expressed optimism 
+                that humanity's first permanent settlement on another planet is now within reach.
+            </p>
+        </article>
+
+        <!-- Small Article 3 - Health -->
+        <article class="small-article3">
+            <span class="category">⚕️ Health</span>
+            <h3>Revolutionary Gene Therapy Shows 95% Success Rate in Clinical Trials</h3>
+            <div class="meta">🏥 Medical • 3 hours ago</div>
+            <p>
+                Medical researchers have announced remarkable results from Phase III clinical trials of a new gene 
+                therapy treatment for inherited genetic disorders. The treatment, which uses CRISPR technology to 
+                correct defective genes, showed a 95% success rate across 500 patients with various conditions 
+                including sickle cell anemia and muscular dystrophy. Patients who received the therapy experienced 
+                complete or near-complete elimination of symptoms with no significant side effects reported. The 
+                FDA has fast-tracked approval, and the therapy could be available to patients within six months. 
+                Medical ethicists are calling this the beginning of a new era in personalized medicine, while patient 
+                advocacy groups are celebrating what they describe as a miracle breakthrough.
+            </p>
+        </article>
+    </main>
+</body>
+</html>

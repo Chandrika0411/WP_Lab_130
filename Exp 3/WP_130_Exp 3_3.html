@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React.js - Modern Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #61dafb;
+            --secondary-color: #282c34;
+            --text-color: #333;
+            --light-bg: #f8f9fa;
+            --white: #ffffff;
+            --code-bg: #1e1e1e;
+            --border-color: #e1e4e8;
+            --hover-bg: rgba(97, 218, 251, 0.1);
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+            line-height: 1.7;
+            color: var(--text-color);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        /* Animated background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(97, 218, 251, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 107, 107, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        /* Navigation Sidebar */
+        #navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 320px;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+
+        #navbar header {
+            padding: 40px 30px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        #navbar header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        #navbar header h1::before {
+            content: '⚛️';
+            font-size: 2.5rem;
+            animation: spin 20s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        #navbar header p {
+            font-size: 0.95rem;
+            opacity: 0.95;
+            font-weight: 300;
+        }
+
+        .nav-section {
+            padding: 10px 0;
+        }
+
+        .nav-section-title {
+            padding: 15px 30px 10px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #999;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 14px 30px;
+            color: var(--text-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .nav-link::before {
+            content: '▸';
+            margin-right: 10px;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+            color: var(--primary-color);
+        }
+
+        .nav-link:hover {
+            background: var(--hover-bg);
+            border-left-color: var(--primary-color);
+            padding-left: 35px;
+            color: #667eea;
+        }
+
+        .nav-link:hover::before {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .nav-link.active {
+            background: var(--hover-bg);
+            border-left-color: var(--primary-color);
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        #main-doc {
+            margin-left: 320px;
+            padding: 60px 80px;
+            max-width: 1400px;
+            position: relative;
+        }
+
+        .main-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            margin-bottom: 50px;
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.15),
+                0 0 0 1px rgba(255, 255, 255, 0.5);
+            animation: fadeInUp 0.6s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--primary-color) 0%, #667eea 100%);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .main-section header {
+            font-size: 3rem;
+            color: var(--secondary-color);
+            margin-bottom: 30px;
+            font-weight: 800;
+            position: relative;
+            display: inline-block;
+        }
+
+        .main-section header::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-color) 0%, #667eea 100%);
+            border-radius: 3px;
+        }
+
+        .main-section p {
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+            color: #555;
+            line-height: 1.9;
+        }
+
+        /* Info Boxes */
+        .info-box {
+            padding: 20px 25px;
+            margin: 25px 0;
+            border-radius: 12px;
+            border-left: 5px solid;
+            background: #f8f9fa;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .info-box.tip {
+            border-left-color: var(--success-color);
+            background: rgba(40, 167, 69, 0.05);
+        }
+
+        .info-box.warning {
+            border-left-color: var(--warning-color);
+            background: rgba(255, 193, 7, 0.05);
+        }
+
+        .info-box.note {
+            border-left-color: var(--primary-color);
+            background: rgba(97, 218, 251, 0.05);
+        }
+
+        .info-box-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .info-box-content p {
+            margin: 0;
+            font-size: 1rem;
+        }
+
+        /* Code Blocks */
+        .main-section code {
+            background: #f3f4f6;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            color: #e01e5a;
+            font-size: 0.9rem;
+            border: 1px solid #e5e7eb;
+            font-weight: 600;
+        }
+
+        .main-section pre {
+            background: var(--code-bg);
+            color: #f8f8f2;
+            padding: 30px;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            border: 1px solid #333;
+        }
+
+        .main-section pre::before {
+            content: attr(data-lang);
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            background: rgba(97, 218, 251, 0.2);
+            color: var(--primary-color);
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .main-section pre code {
+            background: none;
+            color: #a9b7c6;
+            border: none;
+            padding: 0;
+            font-size: 1rem;
+            font-weight: normal;
+            line-height: 1.6;
+        }
+
+        /* Syntax Highlighting */
+        .keyword { color: #cc7832; }
+        .string { color: #6a8759; }
+        .function { color: #ffc66d; }
+        .comment { color: #808080; font-style: italic; }
+        .tag { color: #e8bf6a; }
+        .attribute { color: #bababa; }
+
+        /* Lists */
+        .main-section ul {
+            margin: 25px 0;
+            padding-left: 0;
+            list-style: none;
+        }
+
+        .main-section li {
+            margin-bottom: 18px;
+            font-size: 1.05rem;
+            color: #555;
+            padding-left: 35px;
+            position: relative;
+            line-height: 1.8;
+        }
+
+        .main-section li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--primary-color);
+            font-weight: bold;
+            font-size: 1.3rem;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(97, 218, 251, 0.1);
+            border-radius: 50%;
+        }
+
+        /* Feature Grid */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            border-radius: 15px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        .feature-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feature-card p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        /* Scrollbar */
+        #navbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #navbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        #navbar::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 3px;
+        }
+
+        #navbar::-webkit-scrollbar-thumb:hover {
+            background: #999;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            #navbar {
+                transform: translateX(-100%);
+            }
+
+            #navbar.open {
+                transform: translateX(0);
+            }
+
+            #main-doc {
+                margin-left: 0;
+                padding: 40px 40px;
+            }
+
+            .main-section {
+                padding: 35px;
+            }
+
+            .main-section header {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            #navbar {
+                width: 280px;
+            }
+
+            #main-doc {
+                padding: 30px 25px;
+            }
+
+            .main-section {
+                padding: 30px 25px;
+            }
+
+            .main-section header {
+                font-size: 2rem;
+            }
+
+            .main-section p,
+            .main-section li {
+                font-size: 1rem;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #main-doc {
+                padding: 20px 15px;
+            }
+
+            .main-section {
+                padding: 25px 20px;
+            }
+
+            .main-section header {
+                font-size: 1.8rem;
+            }
+
+            .main-section pre {
+                padding: 20px;
+            }
+        }
+
+        /* Mobile Menu Toggle */
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            background: white;
+            border: none;
+            padding: 12px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background: #333;
+            margin: 5px 0;
+            transition: 0.3s;
+        }
+
+        @media (max-width: 1024px) {
+            .menu-toggle {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Menu Toggle -->
+    <button class="menu-toggle" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <!-- Navigation Sidebar -->
+    <nav id="navbar">
+        <header>
+            <h1>React.js</h1>
+            <p>A JavaScript library for building user interfaces</p>
+        </header>
+        
+        <div class="nav-section">
+            <div class="nav-section-title">Getting Started</div>
+            <a href="#Introduction" class="nav-link">Introduction</a>
+            <a href="#Quick_Start" class="nav-link">Quick Start</a>
+            <a href="#Installation" class="nav-link">Installation</a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-section-title">Core Concepts</div>
+            <a href="#Components" class="nav-link">Components</a>
+            <a href="#JSX_Syntax" class="nav-link">JSX Syntax</a>
+            <a href="#State_and_Props" class="nav-link">State and Props</a>
+        </div>
+    </nav>
+
+    <!-- Main Documentation Content -->
+    <main id="main-doc">
+        <!-- Section 1: Introduction -->
+        <section class="main-section" id="Introduction">
+            <header>Introduction</header>
+            <p>
+                React is a declarative, efficient, and flexible JavaScript library for building user interfaces. 
+                It lets you compose complex UIs from small and isolated pieces of code called "components". 
+                React has been designed from the start for gradual adoption, and you can use as little or as much React as you need.
+            </p>
+            <p>
+                Whether you want to get a taste of React, add some interactivity to an HTML page, or start a complex 
+                React-powered app, this documentation will help you get started. React makes it painless to create 
+                interactive UIs with its component-based architecture.
+            </p>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>⚡ Declarative</h3>
+                    <p>Design simple views for each state in your application, and React will efficiently update and render the right components when your data changes.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🧩 Component-Based</h3>
+                    <p>Build encapsulated components that manage their own state, then compose them to make complex UIs.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>📚 Learn Once, Write Anywhere</h3>
+                    <p>Develop new features in React without rewriting existing code. React can also render on the server using Node and power mobile apps.</p>
+                </div>
+            </div>
+
+            <div class="info-box tip">
+                <div class="info-box-icon">💡</div>
+                <div class="info-box-content">
+                    <p><strong>Pro Tip:</strong> React is maintained by Meta (Facebook) and a community of individual developers and companies. It's used by thousands of companies worldwide including Netflix, Airbnb, and Instagram.</p>
+                </div>
+            </div>
+
+            <p>
+                React has a thriving ecosystem with thousands of open source contributors. The community is incredibly 
+                active, with conferences, meetups, and online resources available worldwide. When you learn React, 
+                you're joining a global community of developers.
+            </p>
+        </section>
+
+        <!-- Section 2: Quick Start -->
+        <section class="main-section" id="Quick_Start">
+            <header>Quick Start</header>
+            <p>
+                The quickest way to try React is to write some code right in your HTML file. You can add React to 
+                any HTML page in one minute, and then either keep using lightweight scripts or gradually build up 
+                to a full featured application.
+            </p>
+            <p>
+                Here's a minimal example that renders "Hello, World!" using React. This code creates a simple React 
+                component and renders it to the DOM using the <code>ReactDOM.createRoot()</code> method.
+            </p>
+
+            <pre data-lang="html"><code><span class="tag">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html&gt;</span>
+  <span class="tag">&lt;head&gt;</span>
+    <span class="tag">&lt;script</span> <span class="attribute">crossorigin</span> <span class="attribute">src</span>=<span class="string">"https://unpkg.com/react@18/umd/react.development.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+    <span class="tag">&lt;script</span> <span class="attribute">crossorigin</span> <span class="attribute">src</span>=<span class="string">"https://unpkg.com/react-dom@18/umd/react-dom.development.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+  <span class="tag">&lt;/head&gt;</span>
+  <span class="tag">&lt;body&gt;</span>
+    <span class="tag">&lt;div</span> <span class="attribute">id</span>=<span class="string">"root"</span><span class="tag">&gt;&lt;/div&gt;</span>
+  <span class="tag">&lt;/body&gt;</span>
+<span class="tag">&lt;/html&gt;</span></code></pre>
+
+            <p>
+                For production applications, you'll want to set up a proper build environment with tools like 
+                <code>Create React App</code>, <code>Vite</code>, or <code>Next.js</code>. These tools provide 
+                hot reloading, optimized builds, and a better development experience.
+            </p>
+
+            <div class="info-box note">
+                <div class="info-box-icon">📝</div>
+                <div class="info-box-content">
+                    <p><strong>Note:</strong> The example above uses unpkg.com to load React from a CDN. This is great for learning and prototyping, but for production apps, you should use a proper build tool.</p>
+                </div>
+            </div>
+
+            <ul>
+                <li>Start with a simple HTML file and add React via CDN</li>
+                <li>Use Create React App for a full-featured setup</li>
+                <li>Try online editors like CodeSandbox or StackBlitz</li>
+                <li>Explore React DevTools browser extension for debugging</li>
+            </ul>
+        </section>
+
+        <!-- Section 3: Installation -->
+        <section class="main-section" id="Installation">
+            <header>Installation</header>
+            <p>
+                To start a new React project, we recommend using a toolchain that provides a comfortable developer 
+                experience and optimizes your app for production. The React team recommends <code>Create React App</code> 
+                for learning React and for starting a new single-page application.
+            </p>
+            <p>
+                Create React App sets up your development environment so that you can use the latest JavaScript features, 
+                provides a nice developer experience, and optimizes your app for production. You'll need to have 
+                <code>Node.js</code> version 14.0.0 or later installed on your machine.
+            </p>
+
+            <pre data-lang="bash"><code><span class="comment"># Create a new React application</span>
+npx create-react-app my-app
+
+<span class="comment"># Navigate into your project</span>
+cd my-app
+
+<span class="comment"># Start the development server</span>
+npm start</code></pre>
+
+            <p>
+                When you run <code>npm start</code>, a browser window will automatically open to 
+                <code>http://localhost:3000</code>. Any changes you make to the source code will be immediately 
+                reflected in the browser thanks to hot module replacement.
+            </p>
+
+            <div class="info-box warning">
+                <div class="info-box-icon">⚠️</div>
+                <div class="info-box-content">
+                    <p><strong>Important:</strong> Make sure you have Node.js installed before proceeding. You can download it from nodejs.org. We recommend using the LTS (Long Term Support) version.</p>
+                </div>
+            </div>
+
+            <p>
+                Alternative options include using <code>Vite</code> for faster builds, <code>Next.js</code> for 
+                server-side rendering, or <code>Gatsby</code> for static site generation. Each tool has its own 
+                strengths depending on your project requirements.
+            </p>
+
+            <ul>
+                <li>Install Node.js from the official website</li>
+                <li>Use npx to create a new React app without global installation</li>
+                <li>Choose your preferred package manager: npm, yarn, or pnpm</li>
+                <li>Consider using TypeScript for better type safety</li>
+                <li>Explore different React frameworks based on your needs</li>
+            </ul>
+        </section>
+
+        <!-- Section 4: Components -->
+        <section class="main-section" id="Components">
+            <header>Components</header>
+            <p>
+                Components are the building blocks of any React application. A component is a JavaScript function 
+                or class that optionally accepts inputs (called "props") and returns a React element that describes 
+                how a section of the UI should appear.
+            </p>
+            <p>
+                There are two types of components in React: Function Components and Class Components. Modern React 
+                development primarily uses function components with Hooks, which provide a simpler and more intuitive 
+                way to work with component logic.
+            </p>
+
+            <pre data-lang="jsx"><code><span class="comment">// Function Component</span>
+<span class="keyword">function</span> <span class="function">Welcome</span>(props) {
+  <span class="keyword">return</span> <span class="tag">&lt;h1&gt;</span>Hello, {props.name}<span class="tag">&lt;/h1&gt;</span>;
+}
+
+<span class="comment">// Using the component</span>
+<span class="keyword">const</span> element = <span class="tag">&lt;Welcome</span> <span class="attribute">name</span>=<span class="string">"Sara"</span> <span class="tag">/&gt;</span>;
+ReactDOM.render(element, document.getElementById(<span class="string">'root'</span>));</code></pre>
+
+            <p>
+                Components let you split the UI into independent, reusable pieces. Each component works in isolation, 
+                making your code more maintainable and testable. You can compose components together to create 
+                complex user interfaces from simple building blocks.
+            </p>
+
+            <div class="info-box tip">
+                <div class="info-box-icon">✨</div>
+                <div class="info-box-content">
+                    <p><strong>Best Practice:</strong> Always start component names with a capital letter. React treats components starting with lowercase letters as DOM tags. For example, <code>&lt;div /&gt;</code> represents an HTML div tag, but <code>&lt;Welcome /&gt;</code> represents a component.</p>
+                </div>
+            </div>
+
+            <ul>
+                <li>Components can be defined as functions or classes</li>
+                <li>Function components are simpler and recommended for new code</li>
+                <li>Components can be nested and reused throughout your application</li>
+                <li>Each component should have a single, well-defined purpose</li>
+                <li>Use Props to pass data from parent to child components</li>
+            </ul>
+
+            <p>
+                As your application grows, you'll find yourself breaking down complex UIs into smaller, manageable 
+                components. This component-based architecture is one of React's greatest strengths, enabling better 
+                code organization and reusability.
+            </p>
+        </section>
+
+        <!-- Section 5: JSX Syntax -->
+        <section class="main-section" id="JSX_Syntax">
+            <header>JSX Syntax</header>
+            <p>
+                JSX is a syntax extension to JavaScript that looks similar to HTML. It allows you to write HTML-like 
+                code in your JavaScript files. JSX produces React "elements" and makes it easier to visualize the 
+                UI structure within your code.
+            </p>
+            <p>
+                While JSX looks like HTML, it's actually closer to JavaScript. Under the hood, JSX gets compiled to 
+                regular JavaScript function calls. This means you can use the full power of JavaScript inside JSX, 
+                including variables, expressions, and functions.
+            </p>
+
+            <pre data-lang="jsx"><code><span class="keyword">const</span> name = <span class="string">'Josh Perez'</span>;
+<span class="keyword">const</span> element = <span class="tag">&lt;h1&gt;</span>Hello, {name}<span class="tag">&lt;/h1&gt;</span>;
+
+<span class="comment">// JSX with expressions</span>
+<span class="keyword">function</span> <span class="function">formatName</span>(user) {
+  <span class="keyword">return</span> user.firstName + <span class="string">' '</span> + user.lastName;
+}
+
+<span class="keyword">const</span> user = {
+  firstName: <span class="string">'Harper'</span>,
+  lastName: <span class="string">'Perez'</span>
+};
+
+<span class="keyword">const</span> greeting = (
+  <span class="tag">&lt;h1&gt;</span>
+    Hello, {<span class="function">formatName</span>(user)}!
+  <span class="tag">&lt;/h1&gt;</span>
+);</code></pre>
+
+            <p>
+                You can embed any JavaScript expression in JSX by wrapping it in curly braces <code>{}</code>. 
+                This includes variables, function calls, and even complex expressions. JSX itself is also an 
+                expression, which means you can use it inside if statements and for loops.
+            </p>
+
+            <div class="info-box note">
+                <div class="info-box-icon">📌</div>
+                <div class="info-box-content">
+                    <p><strong>Remember:</strong> In JSX, use <code>className</code> instead of <code>class</code> and <code>htmlFor</code> instead of <code>for</code> because these are reserved words in JavaScript.</p>
+                </div>
+            </div>
+
+            <ul>
+                <li>JSX makes your code more readable and intuitive</li>
+                <li>You can embed JavaScript expressions using curly braces</li>
+                <li>JSX prevents injection attacks by escaping values</li>
+                <li>JSX represents objects called "React elements"</li>
+                <li>Babel compiles JSX down to React.createElement() calls</li>
+            </ul>
+
+            <p>
+                JSX is not required for using React, but most people find it helpful as a visual aid when working 
+                with UI inside the JavaScript code. It also allows React to show more useful error and warning messages.
+            </p>
+        </section>
+
+        <!-- Section 6: State and Props -->
+        <section class="main-section" id="State_and_Props">
+            <header>State and Props</header>
+            <p>
+                Props and state are the two types of data that control a component in React. Props (short for properties) 
+                are passed to a component from its parent, similar to function parameters. State is managed within 
+                the component, similar to variables declared within a function.
+            </p>
+            <p>
+                The key difference is that state can be changed within the component, while props are read-only and 
+                should not be modified by the component receiving them. When state changes, the component re-renders 
+                to reflect the new state.
+            </p>
+
+            <pre data-lang="jsx"><code><span class="keyword">import</span> { useState } <span class="keyword">from</span> <span class="string">'react'</span>;
+
+<span class="keyword">function</span> <span class="function">Counter</span>() {
+  <span class="comment">// Declare a state variable called "count"</span>
+  <span class="keyword">const</span> [count, setCount] = <span class="function">useState</span>(<span class="string">0</span>);
+
+  <span class="keyword">return</span> (
+    <span class="tag">&lt;div&gt;</span>
+      <span class="tag">&lt;p&gt;</span>You clicked {count} times<span class="tag">&lt;/p&gt;</span>
+      <span class="tag">&lt;button</span> <span class="attribute">onClick</span>={() =&gt; <span class="function">setCount</span>(count + <span class="string">1</span>)}<span class="tag">&gt;</span>
+        Click me
+      <span class="tag">&lt;/button&gt;</span>
+    <span class="tag">&lt;/div&gt;</span>
+  );
+}</code></pre>
+
+            <p>
+                The <code>useState</code> Hook is the most commonly used Hook in React. It lets you add state to 
+                function components. When you call <code>useState</code>, it returns an array with two elements: 
+                the current state value and a function to update it.
+            </p>
+
+            <div class="info-box tip">
+                <div class="info-box-icon">🎯</div>
+                <div class="info-box-content">
+                    <p><strong>Key Concept:</strong> State updates may be asynchronous. React may batch multiple setState() calls into a single update for performance. Always use the functional form of setState when the new state depends on the previous state.</p>
+                </div>
+            </div>
+
+            <p>
+                Props allow you to pass data from parent components to child components, creating a unidirectional 
+                data flow. This makes your application more predictable and easier to debug, as data always flows 
+                in one direction through the component hierarchy.
+            </p>
+
+            <ul>
+                <li>Props are read-only and passed from parent to child</li>
+                <li>State is mutable and managed within the component</li>
+                <li>Use useState Hook to add state to function components</li>
+                <li>Never modify state directly, always use the setter function</li>
+                <li>State updates trigger component re-renders</li>
+                <li>Lift state up to share data between components</li>
+            </ul>
+
+            <p>
+                Understanding the distinction between props and state is crucial for building React applications. 
+                As your application grows, you'll learn patterns like "lifting state up" to share state between 
+                components and using context for global state management.
+            </p>
+        </section>
+    </main>
+
+    <script>
+        function toggleMenu() {
+            const navbar = document.getElementById('navbar');
+            navbar.classList.toggle('open');
+        }
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            const navbar = document.getElementById('navbar');
+            const toggle = document.querySelector('.menu-toggle');
+            
+            if (!navbar.contains(e.target) && !toggle.contains(e.target)) {
+                navbar.classList.remove('open');
+            }
+        });
+
+        // Highlight active nav link on scroll
+        const sections = document.querySelectorAll('.main-section');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').substring(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
