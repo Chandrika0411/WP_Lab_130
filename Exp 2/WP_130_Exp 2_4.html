@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Color Formats Demo</title>
+<style>
+  body {
+    background: #f4f4f4;
+    font-family: Arial, sans-serif;
+    padding: 40px;
+    text-align: center;
+  }
+
+  h2 {
+    margin-bottom: 30px;
+  }
+
+  .color-grid {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .color-box {
+    width: 140px;
+    height: 140px;
+    border-radius: 12px;
+    color: #fff;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    padding: 10px;
+  }
+
+  .color1 { background: #ff5733; }                 /* Hex */
+  .color2 { background: rgb(0, 128, 255); }        /* RGB */
+  .color3 { background: green; }                   /* Named Color */
+  .color4 { background: hsl(200, 80%, 60%); }      /* HSL */
+  .color5 { background: #8e44ad; }                 /* Custom */
+
+  .label {
+    background: rgba(0,0,0,0.4);
+    padding: 6px;
+    border-radius: 6px;
+    font-size: 13px;
+  }
+</style>
+</head>
+<body>
+
+<h2>🎨 CSS Color Formats Demo</h2>
+
+<div class="color-grid">
+  <div class="color-box color1">
+    <div class="label">HEX<br>#ff5733</div>
+  </div>
+
+  <div class="color-box color2">
+    <div class="label">RGB<br>rgb(0,128,255)</div>
+  </div>
+
+  <div class="color-box color3">
+    <div class="label">Named<br>green</div>
+  </div>
+
+  <div class="color-box color4">
+    <div class="label">HSL<br>hsl(200,80%,60%)</div>
+  </div>
+
+  <div class="color-box color5">
+    <div class="label">Custom<br>#8e44ad</div>
+  </div>
+</div>
+
+</body>
+</html>

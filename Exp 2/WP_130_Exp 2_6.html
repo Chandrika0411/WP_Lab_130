@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Confidential Email</title>
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:    #2e3440;
+    --paper: #f5f2eb;
+    --ink:   #2a2a2a;
+    --red:   #d63031;
+  }
+
+  body {
+    font-family: 'Libre Baskerville', serif;
+    background: var(--bg);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+  }
+
+  /* ── outer dark envelope ── */
+  .envelope {
+    background: #353c4a;
+    border-radius: 18px;
+    padding: 38px 36px;
+    box-shadow: 0 24px 60px rgba(0,0,0,.45);
+    max-width: 580px;
+    width: 100%;
+  }
+
+  /* ── white paper ── */
+  .paper {
+    background: var(--paper);
+    border-radius: 8px;
+    border: 2.5px dashed #c5c0b4;
+    padding: 54px 40px 40px;
+    position: relative;
+    min-height: 280px;
+    background-image:
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E"),
+      linear-gradient(var(--paper), var(--paper));
+    box-shadow:
+      inset 0 0 70px rgba(180,170,150,.2),
+      0 4px 18px rgba(0,0,0,.1);
+  }
+
+  /* ─── STAMPS ─── */
+  .stamp {
+    position: absolute;
+    top: -15px;
+    font-family: 'Special Elite', cursive;
+    letter-spacing: .17em;
+    text-transform: uppercase;
+    color: #fff;
+    padding: 7px 20px;
+    border-radius: 5px;
+    z-index: 2;
+    white-space: nowrap;
+  }
+
+  /* RED – Confidential */
+  .stamp-confidential {
+    left: 22px;
+    background: var(--red);
+    font-size: .9rem;
+    transform: rotate(-4.5deg);
+    box-shadow: 0 3px 12px rgba(214,48,49,.45), inset 0 1px 0 rgba(255,255,255,.18);
+    animation: stampConfIn .5s cubic-bezier(.34,1.56,.64,1) .25s both;
+  }
+
+  /* BLACK – Top Secret */
+  .stamp-topsecret {
+    right: 22px;
+    background: #1c1c1c;
+    font-size: .84rem;
+    transform: rotate(2.8deg);
+    box-shadow: 0 3px 12px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.1);
+    animation: stampSecIn .5s cubic-bezier(.34,1.56,.64,1) .5s both;
+  }
+
+  @keyframes stampConfIn {
+    from { opacity: 0; transform: translateY(-18px) scale(1.2) rotate(-4.5deg); filter: blur(3px); }
+    to   { opacity: 1; transform: translateY(0)     scale(1)   rotate(-4.5deg); filter: blur(0);  }
+  }
+  @keyframes stampSecIn {
+    from { opacity: 0; transform: translateY(-18px) scale(1.2) rotate(2.8deg); filter: blur(3px); }
+    to   { opacity: 1; transform: translateY(0)     scale(1)   rotate(2.8deg); filter: blur(0);  }
+  }
+
+  /* ─── BODY TEXT ─── */
+  .paper p {
+    font-size: .96rem;
+    line-height: 1.9;
+    color: var(--ink);
+    margin-bottom: 18px;
+  }
+  .paper p:last-of-type { margin-bottom: 0; }
+
+  /* ─── BLURRED WORDS ─── */
+  .redacted {
+    display: inline;
+    color: var(--ink);
+    filter: blur(5.5px);
+    user-select: none;
+    cursor: not-allowed;
+    animation: flicker 4s ease-in-out infinite;
+  }
+  .redacted.d1 { animation-delay: 0s; }
+  .redacted.d2 { animation-delay: 0.7s; }
+  .redacted.d3 { animation-delay: 1.4s; }
+  .redacted.d4 { animation-delay: 2.1s; }
+  .redacted.d5 { animation-delay: 2.8s; }
+  .redacted.d6 { animation-delay: 3.5s; }
+  .redacted.d7 { animation-delay: 0.3s; }
+  @keyframes flicker {
+    0%, 100% { filter: blur(5.5px); }
+    48%      { filter: blur(5.5px); }
+    50%      { filter: blur(3.8px); }
+    52%      { filter: blur(5.5px); }
+  }
+
+  /* ─── DISCLAIMER ─── */
+  .disclaimer {
+    margin-top: 30px;
+    padding-top: 16px;
+    border-top: 1px solid #d0cbc0;
+    font-size: .7rem;
+    color: #908a7c;
+    font-style: italic;
+    line-height: 1.7;
+    text-align: center;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 520px) {
+    .envelope           { padding: 24px 16px; }
+    .paper              { padding: 48px 22px 32px; }
+    .stamp-confidential { left: 12px; font-size: .78rem; padding: 5px 14px; }
+    .stamp-topsecret    { right: 12px; font-size: .74rem; padding: 5px 14px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="envelope">
+  <div class="paper">
+
+    <!-- ── Stamps ── -->
+    <div class="stamp stamp-confidential">Confidential</div>
+    <div class="stamp stamp-topsecret">Top Secret</div>
+
+    <!-- ── Email Body ── -->
+    <p>
+      This email contains <span class="redacted d1">sensitive classified</span> project details that are
+      meant only for internal use.
+    </p>
+
+    <p>
+      The client data and <span class="redacted d2">financial records</span> must not be
+      shared outside the organisation.
+    </p>
+
+    <p>
+      Any <span class="redacted d3">unauthorised access</span> to this information will be
+      strictly monitored.
+    </p>
+
+    <p>
+      All communications regarding <span class="redacted d4">Project Aegis</span> are to remain
+      within <span class="redacted d5">approved channels</span> only. Failure to comply will result
+      in immediate escalation to the <span class="redacted d6">legal division</span>.
+    </p>
+
+    <!-- ── Disclaimer ── -->
+    <div class="disclaimer">
+      This document is classified. Unauthorised distribution is prohibited under corporate policy &amp; applicable law.<br/>
+      &copy; 2026 NexusCorp Industries &mdash; All rights reserved.
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Stylized To-Do List</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: rgb(188, 90, 197);
+      display: flex;
+      justify-content: center;
+      padding-top: 50px;
+    }
+
+    .todo-container {
+      background: lavender;
+      width: 350px;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    ul.todo-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .todo-list li {
+      margin-bottom: 15px;
+    }
+
+    label {
+      font-weight: bold;
+      margin-left: 8px;
+    }
+
+    .sub-item {
+      margin-left: 25px;
+      margin-top: 5px;
+    }
+
+    .sub-item-link {
+      text-decoration: none;
+      color: #3366cc;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .sub-item-link:visited {
+      color: purple;
+    }
+
+    .sub-item-link:hover {
+      color: #ff6600;
+      text-decoration: underline;
+    }
+
+    .sub-item-link:focus {
+      outline: 2px solid #ff6600;
+    }
+
+    .sub-item-link:active {
+      color: green;
+    }
+  </style>
+</head>
+<body>
+
+<div class="todo-container">
+  <h2>📋 My To-Do List</h2>
+  <ul class="todo-list">
+
+    <li>
+      <input type="checkbox" id="task1">
+      <label for="task1">Practice HTML</label>
+      <ul class="sub-item">
+        <li><a class="sub-item-link" href="https://www.w3schools.com/html/" target="_blank">HTML Tutorial</a></li>
+      </ul>
+    </li>
+
+    <li>
+      <input type="checkbox" id="task2">
+      <label for="task2">Learn CSS</label>
+      <ul class="sub-item">
+        <li><a class="sub-item-link" href="https://www.freecodecamp.org/" target="_blank">CSS Course</a></li>
+      </ul>
+    </li>
+
+    <li>
+      <input type="checkbox" id="task3">
+      <label for="task3">JavaScript Basics</label>
+      <ul class="sub-item">
+        <li><a class="sub-item-link" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">JS Docs</a></li>
+      </ul>
+    </li>
+
+    <li>
+      <input type="checkbox" id="task4">
+      <label for="task4">Build Projects</label>
+      <ul class="sub-item">
+        <li><a class="sub-item-link" href="https://github.com/" target="_blank">My GitHub</a></li>
+      </ul>
+    </li>
+
+  </ul>
+</div>
+
+</body>
+</html>
